@@ -202,7 +202,7 @@ int process (jack_nframes_t nframes, void *arg)
   return 0;      
 }
 
-void on_mqtt_message(void *obj, const mosquitto_message *msg) {
+void on_mqtt_message(struct mosquitto *mosq, void *obj, const mosquitto_message *msg) {
   if(msg->payloadlen){
     char * pl = new char [msg->payloadlen];
     strcpy (pl, (char*)msg->payload);
@@ -232,8 +232,8 @@ int main(int argc, char *argv[]) {
   signal(SIGINT,int_handler); // catch SIGINT
   // Connect to our MQTT broker
   mosquitto_lib_init();
-  mqtt_client = mosquitto_new("changeling", NULL);
-  int res = mosquitto_connect(mqtt_client, "localhost", 1883, 5, true);
+  mqtt_client = mosquitto_new("changeling", true, NULL);
+  int res = mosquitto_connect(mqtt_client, "localhost", 1883, 5);
   if (res != MOSQ_ERR_SUCCESS) {
     fprintf(stderr, "Couldn't connect to MQTT broker on localhost:1883.");
     return 1;
@@ -369,7 +369,7 @@ int main(int argc, char *argv[]) {
     // Send it
     mosquitto_publish(mqtt_client, NULL, "changeling-status", (sizeof(*cstr)*msg.str().size()), (uint8_t*)cstr, 1, false);
     // MQTT loop
-    mosquitto_loop(mqtt_client, 100);
+    mosquitto_loop(mqtt_client, 100, 1);
     cout << msg.str().c_str() << endl;
     usleep(100000); // MICROseconds. NOT milliseconds.
   }
