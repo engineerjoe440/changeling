@@ -315,9 +315,9 @@ int main(int argc, char *argv[]) {
 
   // Open our jingle
   printf("Loading Jingle Audio File %s\n", arguments.file);
-  buffer_file = SndfileHandle(argv[1], SFM_READ);
+  buffer_file = SndfileHandle(arguments.file, SFM_READ);
   if (!buffer_file) {
-    fprintf(stderr, "Error reading buffer file '%s'\n", argv[1]);
+    fprintf(stderr, "Error reading buffer file '%s'\n", arguments.file);
     return 1;
   }
   buffer_file.seek(0, SEEK_SET);
