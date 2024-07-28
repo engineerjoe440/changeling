@@ -441,9 +441,10 @@ int main(int argc, char *argv[]) {
     // Send it
     sprintf(
       buffer,
-      "{\"time\":\"%s\",\"state\":\"%s\",\"buffer_seconds\":%.5f}",
+      "{\"time\":\"%s\",\"state\":\"%s\",\"buffer_seconds\":%.5f,\"max_delay\":%.5f}",
       time_buffer,changelingState_To_String(state),
-      (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate
+      (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate,
+      (float)(max_delay_samples/sample_rate)
     );
     mosquitto_publish(mqtt_client, NULL, "changeling/status", strlen(buffer), &buffer, 1, false);
     // MQTT loop
