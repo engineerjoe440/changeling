@@ -439,7 +439,7 @@ int main(int argc, char *argv[]) {
     msg << ";";
     msg << "BUFFER_SECONDS=" << (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate << ";";
     // Send it
-    sprintf(buffer, "%s", msg.str().c_str());
+    sprintf(buffer, "{\"time\":%s, %s}", time_buffer, msg.str().c_str());
     mosquitto_publish(mqtt_client, NULL, "changeling/status", sizeof(buffer), &buffer, 1, false);
     // MQTT loop
     mosquitto_loop(mqtt_client, 100, 1);
