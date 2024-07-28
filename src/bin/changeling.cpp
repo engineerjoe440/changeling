@@ -82,7 +82,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
       break;
     
     case ARGP_KEY_ARG:
-      if (arguments.file == 0)
+      if (arguments->file == 0)
         /* Too many arguments. */
         argp_usage (state);
 
@@ -91,7 +91,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
       break;
 
     case ARGP_KEY_END:
-      if (arguments.file == 0)
+      if (arguments->file == 0)
         /* Not enough arguments. */
         argp_usage (state);
       break;
