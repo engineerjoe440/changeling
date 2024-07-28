@@ -1,6 +1,7 @@
 
 // Changeling profanity delay
 // James Harrison <james@talkunafraid.co.uk>
+// Joe Stanley <engineerjoe440@yahoo.com>
 #include <csignal>
 #include <iostream>
 #include <stdlib.h>
@@ -296,7 +297,6 @@ The main program loop.
 */
 int main(int argc, char *argv[]) {
   struct arguments arguments;
-  changeling_t pub_data;
 
   arguments.ipAddress = localhost;
 
@@ -434,29 +434,13 @@ int main(int argc, char *argv[]) {
     strftime (buffer,14,"%H:%M:%S - ",timeinfo);
     msg << buffer;
     msg << "STATE=";
-    if (state == CHANGELING_STATE_OUT) {
-      msg << "OUT";
-    } else if (state == CHANGELING_STATE_IN) {
-      msg << "IN";
-    } else if (state == CHANGELING_STATE_LEAVING) {
-      msg << "LEAVING";
-    } else if (state == CHANGELING_STATE_ENTERING) {
-      msg << "ENTERING";
-    } else if (state == CHANGELING_STATE_DUMPING) {
-      msg << "DUMPING";
-    } else if (state == CHANGELING_STATE_EXITING) {
-      msg << "EXITING";
-    }
+    msg << changelingState_To_String(state);
     msg << ";";
     //msg << "BUFFER_BYTES=" << jack_ringbuffer_read_space(buffer_l) << ";";
     //msg << "BUFFER_SAMPLES=" << jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t) << ";";
     msg << "BUFFER_SECONDS=" << (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate << ";";
-    // Pack Data Structure
-    pub_data.time = buffer;
-    pub_data.state = changelingState_To_String(state);
-    pub_data.buffer_seconds = (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate;
     // Send it
-    mosquitto_publish(mqtt_client, NULL, "changeling/status", sizeof(changeling_t), &pub_data, 1, false);
+    mosquitto_publish(mqtt_client, NULL, "changeling/status", sizeof(buffer), &buffer, 1, false);
     // MQTT loop
     mosquitto_loop(mqtt_client, 100, 1);
     cout << msg.str().c_str() << endl;
