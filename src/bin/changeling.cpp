@@ -425,25 +425,25 @@ int main(int argc, char *argv[]) {
       last_state = state;
     }
     // Now construct our message
-    char buffer[80];
+    stringstream msg;
     time_t rawtime;
     struct tm * timeinfo;
     time ( &rawtime );
     timeinfo = localtime ( &rawtime );
-    char time_buffer[7];
-    strftime(time_buffer,7,"%H:%M:%S",timeinfo);
-    // sprintf(
-    //   buffer,
-    //   "%s",
-    //   time_buffer
-    //   // changelingState_To_String(state),
-    //   // (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate
-    // );
-    printf("%s\n", buffer);
+    char time_buffer[14];
+    strftime(time_buffer,14,"%H:%M:%S - ",timeinfo);
+    msg << time_buffer;
+    msg << "STATE=";
+    msg << changelingState_To_String(state);
+    msg << ";";
+    //msg << "BUFFER_BYTES=" << jack_ringbuffer_read_space(buffer_l) << ";";
+    //msg << "BUFFER_SAMPLES=" << jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t) << ";";
+    msg << "BUFFER_SECONDS=" << (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate << ";";
     // Send it
-    mosquitto_publish(mqtt_client, NULL, "changeling/status", sizeof(buffer), &buffer, 1, false);
+    mosquitto_publish(mqtt_client, NULL, "changeling/status", sizeof(msg), &msg, 1, false);
     // MQTT loop
     mosquitto_loop(mqtt_client, 100, 1);
+    cout << msg.str().c_str() << endl;
     usleep(100000); // MICROseconds. NOT milliseconds.
   }
   mosquitto_destroy(mqtt_client);
