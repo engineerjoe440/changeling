@@ -431,7 +431,7 @@ int main(int argc, char *argv[]) {
     time ( &rawtime );
     timeinfo = localtime ( &rawtime );
     char buffer[14];
-    strftime (buffer,14,"%H:%M:%S - ",timeinfo);
+    strftime(buffer,14,"%H:%M:%S - ",timeinfo);
     msg << buffer;
     msg << "STATE=";
     msg << changelingState_To_String(state);
@@ -440,7 +440,7 @@ int main(int argc, char *argv[]) {
     //msg << "BUFFER_SAMPLES=" << jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t) << ";";
     msg << "BUFFER_SECONDS=" << (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate << ";";
     // Send it
-    mosquitto_publish(mqtt_client, NULL, "changeling/status", sizeof(buffer), &buffer, 1, false);
+    mosquitto_publish(mqtt_client, NULL, "changeling/status", sizeof(msg), &msg, 1, false);
     // MQTT loop
     mosquitto_loop(mqtt_client, 100, 1);
     cout << msg.str().c_str() << endl;
