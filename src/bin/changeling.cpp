@@ -434,10 +434,10 @@ int main(int argc, char *argv[]) {
     strftime(time_buffer,14,"%H:%M:%S - ",timeinfo);
     sprintf(
       msg,
-      "{\"time\":%s,\"state\":%s,\"buffer_seconds\":%.5f}",
+      "{\"time\":%s,\"state\":s,\"buffer_seconds\":.5f}",
       time_buffer,
-      changelingState_To_String(state),
-      (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate
+      // changelingState_To_String(state),
+      // (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate
     );
     cout << msg << endl;
     // Send it
