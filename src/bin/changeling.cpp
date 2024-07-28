@@ -60,19 +60,44 @@ jack_nframes_t cur_delay_samples;
 const char *argp_program_version = "changeling 1.0";
 const char *argp_program_bug_address = "<engineerjoe440@yahoo.com>";
 static char doc[] = "A simple jingle-based MQTT-controllable broadcast profanity delay";
-static char args_doc[] = "[changeling]...";
+static char args_doc[] = "AUDIO_FILE.wav";
 static struct argp_option options[] = { 
     { "line", 'l', 0, 0, "Compare lines instead of characters."},
     { "word", 'w', 0, 0, "Compare words instead of characters."},
-    { "nocase", 'i', 0, 0, "Compare case insensitive instead of case sensitive."},
+    { "ipAddress", 'i', 0, 0, "IP Address of MQTT Broker."},
     { 0 } 
 };
 
 struct arguments {
-    bool isCaseInsensitive;
+  char *file;                /* SOME_FILE.wav */
+  char *ipAddress;
 };
 
 static error_t parse_opt(int key, char *arg, struct argp_state *state) {
+    struct arguments *arguments = state->input;
+    switch (key) {
+    case 'i':
+      arguments->ipAddress = arg;
+
+      break;
+    
+    case ARGP_KEY_ARG:
+      if (state->arg_num >= 1)
+        /* Too many arguments. */
+        argp_usage (state);
+
+      arguments->file = arg;
+
+      break;
+
+    case ARGP_KEY_END:
+      if (state->arg_num < 1)
+        /* Not enough arguments. */
+        argp_usage (state);
+      break;
+    default: return ARGP_ERR_UNKNOWN;
+    }
+
     return 0;
 }
 
@@ -247,13 +272,14 @@ void on_mqtt_message(struct mosquitto *mosq, void *obj, const mosquitto_message 
 The main program loop.
 */
 int main(int argc, char *argv[]) {
-  printf("Changeling Profanity Delay - Starting up\n");
-
   struct arguments arguments;
 
   arguments.isCaseInsensitive = false;
 
   argp_parse(&argp, argc, argv, 0, 0, &arguments);
+
+  // Start changeling application
+  printf("Changeling Profanity Delay - Starting up\n");
 
   if (argc < 2) {
     fprintf(stderr, "Expecting wav file as argument\n");
