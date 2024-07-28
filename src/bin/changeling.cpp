@@ -274,7 +274,7 @@ The main program loop.
 int main(int argc, char *argv[]) {
   struct arguments arguments;
 
-  arguments.ipAddress = &localhost;
+  arguments.ipAddress = localhost;
 
   argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
