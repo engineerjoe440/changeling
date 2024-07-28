@@ -439,11 +439,11 @@ int main(int argc, char *argv[]) {
       changelingState_To_String(state),
       (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate
     );
+    cout << msg << endl;
     // Send it
     mosquitto_publish(mqtt_client, NULL, "changeling/status", sizeof(msg), &msg, 1, false);
     // MQTT loop
     mosquitto_loop(mqtt_client, 100, 1);
-    cout << msg << endl;
     usleep(100000); // MICROseconds. NOT milliseconds.
   }
   mosquitto_destroy(mqtt_client);
