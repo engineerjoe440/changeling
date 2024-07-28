@@ -445,7 +445,7 @@ int main(int argc, char *argv[]) {
       time_buffer,changelingState_To_String(state),
       (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate
     );
-    mosquitto_publish(mqtt_client, NULL, "changeling/status", sizeof(buffer), &buffer, 1, false);
+    mosquitto_publish(mqtt_client, NULL, "changeling/status", strlen(buffer), &buffer, 1, false);
     // MQTT loop
     mosquitto_loop(mqtt_client, 100, 1);
     cout << msg.str().c_str() << endl;
