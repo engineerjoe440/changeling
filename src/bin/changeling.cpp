@@ -57,7 +57,7 @@ jack_nframes_t max_delay_samples;
 /// Current size of the buffer in samples
 jack_nframes_t cur_delay_samples;
 
-char *localhost = 'localhost';
+char *localhost = "localhost";
 
 const char *argp_program_version = "changeling 1.0";
 const char *argp_program_bug_address = "<engineerjoe440@yahoo.com>";
