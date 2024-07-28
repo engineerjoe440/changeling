@@ -94,9 +94,11 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
         argp_usage (state);
       }
 
-      if (ends_with(arg, ".wav"))
+      if (ends_with(arg, ".wav")) {
         // String ends with `.wav` -- Must be the file
+        fprintf(stderr, "File provided: %s\n", arg);
         arguments->file = arg;
+      }
 
       break;
 
