@@ -82,10 +82,11 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
       break;
     
     case ARGP_KEY_ARG:
-      if (arguments->file != 0)
-        fprintf(stderr, "IP Address Already Set: %s", arguments->file);
+      if (arguments->file != 0) {
+        fprintf(stderr, "File already provided: %s", arguments->file);
         /* Too many arguments. */
         argp_usage (state);
+      }
 
       arguments->file = arg;
 
