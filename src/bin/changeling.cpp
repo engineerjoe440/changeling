@@ -292,9 +292,9 @@ int main(int argc, char *argv[]) {
   fprintf(stderr, "Connecting to MQTT broker %s\n", arguments.ipAddress);
   mosquitto_lib_init();
   mqtt_client = mosquitto_new("changeling", true, NULL);
-  int res = mosquitto_connect(mqtt_client, "localhost", 1883, 5);
+  int res = mosquitto_connect(mqtt_client, arguments.ipAddress, 1883, 5);
   if (res != MOSQ_ERR_SUCCESS) {
-    fprintf(stderr, "Couldn't connect to MQTT broker on localhost:1883.");
+    fprintf(stderr, "Couldn't connect to MQTT broker on %s:1883.\n", arguments.ipAddress);
     return 1;
   }
   mosquitto_subscribe(mqtt_client, NULL, "changeling-commands", 1);
