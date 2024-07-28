@@ -73,6 +73,25 @@ struct arguments {
   char *ipAddress;
 };
 
+typedef struct __attribute__ ((__packed__)){
+  char *time;
+  char *state;
+  float buffer_seconds;
+} changelingdata_t;
+
+inline const char* changelingstate_s(ChangelingRunState state) {
+  switch (state)
+    {
+        case ChangelingRunState.CHANGELING_STATE_DUMPING:   return "DUMP";
+        case ChangelingRunState.CHANGELING_STATE_ENTERING:  return "ENTERING";
+        case ChangelingRunState.CHANGELING_STATE_EXITING:   return "EXITING";
+        case ChangelingRunState.CHANGELING_STATE_IN:        return "IN";
+        case ChangelingRunState.CHANGELING_STATE_LEAVING:   return "LEAVING";
+        case ChangelingRunState.CHANGELING_STATE_OUT:       return "OUT";
+        default:      return "[Unknown State]";
+    }
+}
+
 inline bool ends_with(std::string const & value, std::string const & ending)
 {
     if (ending.size() > value.size()) return false;
@@ -283,6 +302,7 @@ The main program loop.
 */
 int main(int argc, char *argv[]) {
   struct arguments arguments;
+  struct changelingdata_t pub_data;
 
   arguments.ipAddress = localhost;
 
@@ -437,11 +457,12 @@ int main(int argc, char *argv[]) {
     //msg << "BUFFER_BYTES=" << jack_ringbuffer_read_space(buffer_l) << ";";
     //msg << "BUFFER_SAMPLES=" << jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t) << ";";
     msg << "BUFFER_SECONDS=" << (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate << ";";
-    //char * cstr = new char [msg.str().size()+1];
-    //strcpy (cstr, msg.str().c_str());
-    const char * cstr = msg.str().c_str();
+    // Pack Data Structure
+    pub_data.time = buffer;
+    pub_data.state = changelingstate_s(state);
+    pub_data.buffer_seconds = (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate
     // Send it
-    mosquitto_publish(mqtt_client, NULL, "changeling/status", (sizeof(*cstr)*msg.str().size()), (uint8_t*)cstr, 1, false);
+    mosquitto_publish(mqtt_client, NULL, "changeling/status", sizeof(changelingdata_t), &pub_data, 1, false);
     // MQTT loop
     mosquitto_loop(mqtt_client, 100, 1);
     cout << msg.str().c_str() << endl;
