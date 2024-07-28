@@ -89,14 +89,15 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     
     case ARGP_KEY_ARG:
       if (ends_with(arg, ".wav")) {
+        // String ends with `.wav` -- Must be the file
+        fprintf(stderr, "File provided: %s\n", arg);
+        
         if (arguments->file != 0) {
           fprintf(stderr, "File already provided: %s\n", arguments->file);
           /* Too many arguments. */
           argp_usage (state);
         }
-
-        // String ends with `.wav` -- Must be the file
-        fprintf(stderr, "File provided: %s\n", arg);
+        
         arguments->file = arg;
       }
 
