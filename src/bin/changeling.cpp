@@ -248,7 +248,7 @@ int process (jack_nframes_t nframes, void *arg)
     }
   } else if (state == CHANGELING_STATE_DUMPING) {
     // If we're DUMPING, we want to wipe our buffers and return to ENTERING, doing one frame of OUT's 1-1 copying.
-    memcpy (out_l, in_l, sizeof (jack_default_arguments.ipAddressaudio_sample_t) * nframes);
+    memcpy (out_l, in_l, sizeof (jack_default_audio_sample_t) * nframes);
     memcpy (out_r, in_r, sizeof (jack_default_audio_sample_t) * nframes);
     // Now wipe the buffer entirely
     jack_ringbuffer_reset(buffer_l);
