@@ -61,9 +61,7 @@ const char *argp_program_version = "changeling 1.0";
 const char *argp_program_bug_address = "<engineerjoe440@yahoo.com>";
 static char doc[] = "A simple jingle-based MQTT-controllable broadcast profanity delay";
 static char args_doc[] = "AUDIO_FILE.wav";
-static struct argp_option options[] = { 
-    { "line", 'l', 0, 0, "Compare lines instead of characters."},
-    { "word", 'w', 0, 0, "Compare words instead of characters."},
+static struct argp_option options[] = {
     { "ipAddress", 'i', 0, 0, "IP Address of MQTT Broker."},
     { 0 } 
 };
@@ -74,7 +72,7 @@ struct arguments {
 };
 
 static error_t parse_opt(int key, char *arg, struct argp_state *state) {
-    struct arguments *arguments = state->input;
+    struct arguments *arguments = static_cast<struct arguments*>(state->input);
     switch (key) {
     case 'i':
       arguments->ipAddress = arg;
@@ -274,7 +272,7 @@ The main program loop.
 int main(int argc, char *argv[]) {
   struct arguments arguments;
 
-  arguments.isCaseInsensitive = false;
+  arguments.ipAddress = "localhost";
 
   argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
