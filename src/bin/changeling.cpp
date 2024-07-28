@@ -296,7 +296,7 @@ The main program loop.
 */
 int main(int argc, char *argv[]) {
   struct arguments arguments;
-  struct changeling_t pub_data;
+  changeling_t pub_data;
 
   arguments.ipAddress = localhost;
 
