@@ -432,13 +432,13 @@ int main(int argc, char *argv[]) {
     timeinfo = localtime ( &rawtime );
     char time_buffer[7];
     strftime(time_buffer,7,"%H:%M:%S",timeinfo);
-    sprintf(
-      buffer,
-      "%s",
-      time_buffer
-      // changelingState_To_String(state),
-      // (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate
-    );
+    // sprintf(
+    //   buffer,
+    //   "%s",
+    //   time_buffer
+    //   // changelingState_To_String(state),
+    //   // (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate
+    // );
     printf("%s\n", buffer);
     // Send it
     mosquitto_publish(mqtt_client, NULL, "changeling/status", sizeof(buffer), &buffer, 1, false);
