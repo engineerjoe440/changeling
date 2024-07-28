@@ -302,7 +302,7 @@ int main(int argc, char *argv[]) {
 
   signal(SIGINT,int_handler); // catch SIGINT
   // Connect to our MQTT broker
-  fprintf(stderr, "Connecting to MQTT broker %s\n", arguments.ipAddress);
+  printf("Connecting to MQTT broker %s\n", arguments.ipAddress);
   mosquitto_lib_init();
   mqtt_client = mosquitto_new("changeling", true, NULL);
   int res = mosquitto_connect(mqtt_client, arguments.ipAddress, 1883, 5);
@@ -314,6 +314,7 @@ int main(int argc, char *argv[]) {
   mosquitto_message_callback_set(mqtt_client, on_mqtt_message);
 
   // Open our jingle
+  printf("Loading Jingle Audio File %s\n", arguments.file);
   buffer_file = SndfileHandle(argv[1], SFM_READ);
   if (!buffer_file) {
     fprintf(stderr, "Error reading buffer file '%s'\n", argv[1]);
