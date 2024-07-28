@@ -433,7 +433,7 @@ int main(int argc, char *argv[]) {
     char time_buffer[14];
     strftime(time_buffer,14,"%H:%M:%S - ",timeinfo);
     sprintf(
-      &msg,
+      msg,
       "{\"time\":%s,\"state\":%s,\"buffer_seconds\":%.5f}",
       time_buffer,
       changelingState_To_String(state),
