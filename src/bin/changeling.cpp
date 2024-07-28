@@ -64,7 +64,7 @@ const char *argp_program_bug_address = "<engineerjoe440@yahoo.com>";
 static char doc[] = "A simple jingle-based MQTT-controllable broadcast profanity delay";
 static char args_doc[] = "AUDIO_FILE.wav";
 static struct argp_option options[] = {
-    { "ipAddress", 'i', 0, 0, "IP Address of MQTT Broker."},
+    { "ipAddress", 'i', "IP_ADDR", 0, "IP Address of MQTT Broker."},
     { 0 } 
 };
 
@@ -83,7 +83,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     
     case ARGP_KEY_ARG:
       if (arguments->file != 0) {
-        fprintf(stderr, "File already provided: %s", arguments->file);
+        fprintf(stderr, "File already provided: %s\n", arguments->file);
         /* Too many arguments. */
         argp_usage (state);
       }
