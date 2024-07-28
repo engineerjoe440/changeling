@@ -73,6 +73,12 @@ struct arguments {
   char *ipAddress;
 };
 
+inline bool ends_with(std::string const & value, std::string const & ending)
+{
+    if (ending.size() > value.size()) return false;
+    return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+}
+
 static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     struct arguments *arguments = static_cast<struct arguments*>(state->input);
     switch (key) {
@@ -88,7 +94,9 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
         argp_usage (state);
       }
 
-      arguments->file = arg;
+      if ends_with(arg, ".wav")
+        // String ends with `.wav` -- Must be the file
+        arguments->file = arg;
 
       break;
 
@@ -240,7 +248,7 @@ int process (jack_nframes_t nframes, void *arg)
     }
   } else if (state == CHANGELING_STATE_DUMPING) {
     // If we're DUMPING, we want to wipe our buffers and return to ENTERING, doing one frame of OUT's 1-1 copying.
-    memcpy (out_l, in_l, sizeof (jack_default_audio_sample_t) * nframes);
+    memcpy (out_l, in_l, sizeof (jack_default_arguments.ipAddressaudio_sample_t) * nframes);
     memcpy (out_r, in_r, sizeof (jack_default_audio_sample_t) * nframes);
     // Now wipe the buffer entirely
     jack_ringbuffer_reset(buffer_l);
