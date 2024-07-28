@@ -432,7 +432,7 @@ int main(int argc, char *argv[]) {
     timeinfo = localtime ( &rawtime );
     char time_buffer[14];
     strftime(time_buffer,14,"%H:%M:%S - ",timeinfo);
-    fprintf(
+    sprintf(
       msg,
       "{\"time\":%s,\"state\":%s,\"buffer_seconds\":%.5f}",
       time_buffer,
