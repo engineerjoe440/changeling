@@ -252,7 +252,7 @@ int main(int argc, char *argv[]) {
 
   struct arguments arguments;
 
-  arguments.mode = CHARACTER_MODE;
+  arguments.mode = mode.CHARACTER_MODE;
   arguments.isCaseInsensitive = false;
 
   argp_parse(&argp, argc, argv, 0, 0, &arguments);
