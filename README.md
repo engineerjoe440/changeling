@@ -36,13 +36,13 @@ The delay also accepts control over MQTT, allowing you to:
 * Dump the buffer (at any point except when OUT)
 * Leave the delay (at any point when IN)
 
-These are done by sending one of the respective strings to the ```changeling-commands``` topic:
+These are done by sending one of the respective strings to the ```changeling/commands``` topic:
 
 * ENTER
 * DUMP
 * EXIT
 
-Feedback from the delay and updates are broadcast on the ```changeling-status``` topic with a message format of:
+Feedback from the delay and updates are broadcast on the ```changeling/status``` topic with a message format of:
 
     HH:MM:SS - STATE=(IN|OUT|ENTERING|LEAVING|DUMPING);BUFFER_SECONDS=float;
 
@@ -53,16 +53,16 @@ This is: Timestamp, state, buffer size in seconds (should be 0 when OUT and the 
 You can use mosquitto\_pub and mosquitto\_sub for simple control of the delay with no external dependencies or code.
 
     # To enter delay
-    mosquitto_pub -t changeling-commands -m ENTER
+    mosquitto_pub -t changeling/commands -m ENTER
     # To exit delay
-    mosquitto_pub -t changeling-commands -m EXIT
+    mosquitto_pub -t changeling/commands -m EXIT
     # To dump delay buffers
-    mosquitto_pub -t changeling-commands -m EXIT
+    mosquitto_pub -t changeling/commands -m EXIT
 
 And for listening to the result of these commands:
 
     # To listen to status messages
-    mosquitto_sub -t changeling-status
+    mosquitto_sub -t changeling/status
 
 
 ## Dependencies and Compilation

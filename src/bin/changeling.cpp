@@ -310,7 +310,7 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "Couldn't connect to MQTT broker on %s:1883.\n", arguments.ipAddress);
     return 1;
   }
-  mosquitto_subscribe(mqtt_client, NULL, "changeling-commands", 1);
+  mosquitto_subscribe(mqtt_client, NULL, "changeling/commands", 1);
   mosquitto_message_callback_set(mqtt_client, on_mqtt_message);
 
   // Open our jingle
@@ -441,7 +441,7 @@ int main(int argc, char *argv[]) {
     //strcpy (cstr, msg.str().c_str());
     const char * cstr = msg.str().c_str();
     // Send it
-    mosquitto_publish(mqtt_client, NULL, "changeling-status", (sizeof(*cstr)*msg.str().size()), (uint8_t*)cstr, 1, false);
+    mosquitto_publish(mqtt_client, NULL, "changeling/status", (sizeof(*cstr)*msg.str().size()), (uint8_t*)cstr, 1, false);
     // MQTT loop
     mosquitto_loop(mqtt_client, 100, 1);
     cout << msg.str().c_str() << endl;
