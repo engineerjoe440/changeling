@@ -73,7 +73,7 @@ struct arguments {
   char *ipAddress;
 };
 
-inline const char* changelingstate_s(ChangelingRunState state) {
+inline char* changelingState_To_String(ChangelingRunState state) {
   switch (state)
     {
         case CHANGELING_STATE_DUMPING:   return "DUMP";
@@ -453,8 +453,8 @@ int main(int argc, char *argv[]) {
     msg << "BUFFER_SECONDS=" << (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate << ";";
     // Pack Data Structure
     pub_data.time = buffer;
-    pub_data.state = changelingstate_s(state);
-    pub_data.buffer_seconds = (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate
+    pub_data.state = changelingState_To_String(state);
+    pub_data.buffer_seconds = (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate;
     // Send it
     mosquitto_publish(mqtt_client, NULL, "changeling/status", sizeof(changeling_t), &pub_data, 1, false);
     // MQTT loop
