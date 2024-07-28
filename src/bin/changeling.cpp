@@ -425,7 +425,7 @@ int main(int argc, char *argv[]) {
       last_state = state;
     }
     // Now construct our message
-    char msg[80];
+    char buffer[80];
     time_t rawtime;
     struct tm * timeinfo;
     time ( &rawtime );
@@ -433,15 +433,15 @@ int main(int argc, char *argv[]) {
     char time_buffer[7];
     strftime(time_buffer,7,"%H:%M:%S",timeinfo);
     sprintf(
-      msg,
+      buffer,
       "{\"time\":%s,\"state\":s,\"buffer_seconds\":.5f}",
       time_buffer
       // changelingState_To_String(state),
       // (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate
     );
-    cout << msg << endl;
+    printf("%s\n", buffer);
     // Send it
-    mosquitto_publish(mqtt_client, NULL, "changeling/status", sizeof(msg), &msg, 1, false);
+    mosquitto_publish(mqtt_client, NULL, "changeling/status", sizeof(buffer), &buffer, 1, false);
     // MQTT loop
     mosquitto_loop(mqtt_client, 100, 1);
     usleep(100000); // MICROseconds. NOT milliseconds.
