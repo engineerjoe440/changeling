@@ -69,7 +69,6 @@ static struct argp_option options[] = {
 };
 
 struct arguments {
-    enum { CHARACTER_MODE, WORD_MODE, LINE_MODE } mode;
     bool isCaseInsensitive;
 };
 
@@ -252,7 +251,6 @@ int main(int argc, char *argv[]) {
 
   struct arguments arguments;
 
-  arguments.mode = mode.CHARACTER_MODE;
   arguments.isCaseInsensitive = false;
 
   argp_parse(&argp, argc, argv, 0, 0, &arguments);
