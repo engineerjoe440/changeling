@@ -291,10 +291,15 @@ int main(int argc, char *argv[]) {
   // Start changeling application
   printf("Changeling Profanity Delay - Starting up\n");
 
-  if (argc < 2) {
+  if (arguments.file == 0) {
     fprintf(stderr, "Expecting wav file as argument\n");
     return 1;
   }
+  if (!ends_with(arguments.file, ".wav")) {
+    fprintf(stderr, "Expected file to end with extension '.wav'\n");
+    return 1;
+  }
+
   signal(SIGINT,int_handler); // catch SIGINT
   // Connect to our MQTT broker
   fprintf(stderr, "Connecting to MQTT broker %s\n", arguments.ipAddress);
@@ -337,8 +342,9 @@ int main(int argc, char *argv[]) {
   sample_rate = jack_get_sample_rate(client);
   cout << "JACK Sample rate: "<< sample_rate << endl;
 
-  if ((uint)buffer_file.samplerate() != sample_rate) {
-    fprintf(stderr, "Buffer file should be of sample rate %d\n",sample_rate);
+  uint src_sample_rate = (uint)buffer_file.samplerate();
+  if (src_sample_rate != sample_rate) {
+    fprintf(stderr, "Buffer file should be of sample rate %d -- Source file was: %d\n", sample_rate, src_sample_rate);
     return 1;
   }
 
