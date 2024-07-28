@@ -20,8 +20,6 @@
 
 using namespace std;
 
-#define VERSION "0.0.1"
-
 // Setup our JACK connectivity
 /// Input ports
 jack_port_t *input_port[2] = {NULL, NULL};
@@ -59,7 +57,7 @@ jack_nframes_t max_delay_samples;
 /// Current size of the buffer in samples
 jack_nframes_t cur_delay_samples;
 
-const char *argp_program_version = sprintf("changeling %s", VERSION);
+const char *argp_program_version = "changeling 1.0";
 const char *argp_program_bug_address = "<engineerjoe440@yahoo.com>";
 static char doc[] = "A simple jingle-based MQTT-controllable broadcast profanity delay";
 static char args_doc[] = "[changeling]...";
