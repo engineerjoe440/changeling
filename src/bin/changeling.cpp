@@ -57,7 +57,7 @@ jack_nframes_t max_delay_samples;
 /// Current size of the buffer in samples
 jack_nframes_t cur_delay_samples;
 
-char localhost = "localhost";
+char *localhost = "localhost";
 
 const char *argp_program_version = "changeling 1.0";
 const char *argp_program_bug_address = "<engineerjoe440@yahoo.com>";
@@ -82,7 +82,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
       break;
     
     case ARGP_KEY_ARG:
-      if (arguments->file == 0)
+      if (arguments->file != 0)
         /* Too many arguments. */
         argp_usage (state);
 
@@ -274,7 +274,7 @@ The main program loop.
 int main(int argc, char *argv[]) {
   struct arguments arguments;
 
-  arguments.ipAddress = &localhost;
+  arguments.ipAddress = localhost;
 
   argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
