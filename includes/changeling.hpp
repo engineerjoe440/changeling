@@ -1,6 +1,7 @@
 
 // Changeling profanity delay
 // James Harrison <james@talkunafraid.co.uk>
+// Joe Stanley <engineerjoe440@yahoo.com>
 
 /// Our various possible running states
 typedef enum {
@@ -19,3 +20,11 @@ typedef enum {
   /// Starting up
   CHANGELING_STATE_STARTING
 } ChangelingRunState;
+
+
+// MQTT Packed Data
+typedef struct __attribute__ ((__packed__)){
+  char *time;
+  char *state;
+  float buffer_seconds;
+} changeling_t;

@@ -73,21 +73,15 @@ struct arguments {
   char *ipAddress;
 };
 
-typedef struct __attribute__ ((__packed__)){
-  char *time;
-  char *state;
-  float buffer_seconds;
-} changelingdata_t;
-
 inline const char* changelingstate_s(ChangelingRunState state) {
   switch (state)
     {
-        case ChangelingRunState.CHANGELING_STATE_DUMPING:   return "DUMP";
-        case ChangelingRunState.CHANGELING_STATE_ENTERING:  return "ENTERING";
-        case ChangelingRunState.CHANGELING_STATE_EXITING:   return "EXITING";
-        case ChangelingRunState.CHANGELING_STATE_IN:        return "IN";
-        case ChangelingRunState.CHANGELING_STATE_LEAVING:   return "LEAVING";
-        case ChangelingRunState.CHANGELING_STATE_OUT:       return "OUT";
+        case CHANGELING_STATE_DUMPING:   return "DUMP";
+        case CHANGELING_STATE_ENTERING:  return "ENTERING";
+        case CHANGELING_STATE_EXITING:   return "EXITING";
+        case CHANGELING_STATE_IN:        return "IN";
+        case CHANGELING_STATE_LEAVING:   return "LEAVING";
+        case CHANGELING_STATE_OUT:       return "OUT";
         default:      return "[Unknown State]";
     }
 }
@@ -302,7 +296,7 @@ The main program loop.
 */
 int main(int argc, char *argv[]) {
   struct arguments arguments;
-  struct changelingdata_t pub_data;
+  struct changeling_t pub_data;
 
   arguments.ipAddress = localhost;
 
@@ -462,7 +456,7 @@ int main(int argc, char *argv[]) {
     pub_data.state = changelingstate_s(state);
     pub_data.buffer_seconds = (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate
     // Send it
-    mosquitto_publish(mqtt_client, NULL, "changeling/status", sizeof(changelingdata_t), &pub_data, 1, false);
+    mosquitto_publish(mqtt_client, NULL, "changeling/status", sizeof(changeling_t), &pub_data, 1, false);
     // MQTT loop
     mosquitto_loop(mqtt_client, 100, 1);
     cout << msg.str().c_str() << endl;
