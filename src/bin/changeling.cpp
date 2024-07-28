@@ -272,7 +272,7 @@ The main program loop.
 int main(int argc, char *argv[]) {
   struct arguments arguments;
 
-  arguments.ipAddress = &"localhost";
+  arguments.ipAddress = &'localhost';
 
   argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
@@ -285,7 +285,7 @@ int main(int argc, char *argv[]) {
   }
   signal(SIGINT,int_handler); // catch SIGINT
   // Connect to our MQTT broker
-  fprintf(stderr, sprintf("Connecting to MQTT broker %s\n", arguments.ipAddress));
+  fprintf(stderr, "Connecting to MQTT broker %s\n", arguments.ipAddress);
   mosquitto_lib_init();
   mqtt_client = mosquitto_new("changeling", true, NULL);
   int res = mosquitto_connect(mqtt_client, "localhost", 1883, 5);
