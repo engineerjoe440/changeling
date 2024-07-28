@@ -14,9 +14,13 @@
 #include <jack/ringbuffer.h>
 #include <sndfile.hh>
 #include <mosquitto.h>
+#include <argp.h>
+#include <stdbool.h>
 #include "changeling.hpp"
 
 using namespace std;
+
+#define VERSION "0.0.1"
 
 // Setup our JACK connectivity
 /// Input ports
@@ -54,6 +58,36 @@ float max_delay_seconds;
 jack_nframes_t max_delay_samples;
 /// Current size of the buffer in samples
 jack_nframes_t cur_delay_samples;
+
+const char *argp_program_version = sprintf("changeling %s", VERSION);
+const char *argp_program_bug_address = "<engineerjoe440@yahoo.com>";
+static char doc[] = "A simple jingle-based MQTT-controllable broadcast profanity delay";
+static char args_doc[] = "[changeling]...";
+static struct argp_option options[] = { 
+    { "line", 'l', 0, 0, "Compare lines instead of characters."},
+    { "word", 'w', 0, 0, "Compare words instead of characters."},
+    { "nocase", 'i', 0, 0, "Compare case insensitive instead of case sensitive."},
+    { 0 } 
+};
+
+struct arguments {
+    enum { CHARACTER_MODE, WORD_MODE, LINE_MODE } mode;
+    bool isCaseInsensitive;
+};
+
+static error_t parse_opt(int key, char *arg, struct argp_state *state) {
+    struct arguments *arguments = state->input;
+    switch (key) {
+    case 'l': arguments->mode = LINE_MODE; break;
+    case 'w': arguments->mode = WORD_MODE; break;
+    case 'i': arguments->isCaseInsensitive = true; break;
+    case ARGP_KEY_ARG: return 0;
+    default: return ARGP_ERR_UNKNOWN;
+    }   
+    return 0;
+}
+
+static struct argp argp = { options, parse_opt, args_doc, doc, 0, 0, 0 };
 
 
 /// Interrupt handler - mark our state as EXITING so we can gracefully clear up
@@ -225,7 +259,15 @@ The main program loop.
 */
 int main(int argc, char *argv[]) {
   printf("Changeling Profanity Delay - Starting up\n");
-  if (argc != 2) {
+
+  struct arguments arguments;
+
+  arguments.mode = CHARACTER_MODE;
+  arguments.isCaseInsensitive = false;
+
+  argp_parse(&argp, argc, argv, 0, 0, &arguments);
+
+  if (argc < 2) {
     fprintf(stderr, "Expecting wav file as argument\n");
     return 1;
   }
