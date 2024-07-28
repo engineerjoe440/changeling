@@ -431,15 +431,15 @@ int main(int argc, char *argv[]) {
     struct tm * timeinfo;
     time ( &rawtime );
     timeinfo = localtime ( &rawtime );
-    char time_buffer[14];
-    strftime(time_buffer,14,"%H:%M:%S - ",timeinfo);
+    char time_buffer[8];
+    strftime(time_buffer,8,"%H:%M:%S",timeinfo);
     msg << time_buffer;
-    msg << "STATE=";
+    msg << " - STATE=";
     msg << changelingState_To_String(state);
     msg << ";";
     msg << "BUFFER_SECONDS=" << (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate << ";";
     // Send it
-    sprintf(buffer, "{\"time\":%s, %s}", time_buffer, msg.str().c_str());
+    sprintf(buffer, "{\"time\":%s,\"state\":%s,%s}", time_buffer, changelingState_To_String(state), msg.str().c_str());
     mosquitto_publish(mqtt_client, NULL, "changeling/status", sizeof(buffer), &buffer, 1, false);
     // MQTT loop
     mosquitto_loop(mqtt_client, 100, 1);
