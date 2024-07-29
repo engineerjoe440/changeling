@@ -330,12 +330,12 @@ int main(int argc, char *argv[]) {
   mosquitto_subscribe(mqtt_client, NULL, "changeling/commands", 1);
   mosquitto_message_callback_set(mqtt_client, on_mqtt_message);
 
-  CROW_ROUTE(app, "/")([](){
-      return "Hello world";
-  });
+  // CROW_ROUTE(app, "/")([](){
+  //     return "Hello world";
+  // });
 
-  // printf("Starting Web Server");
-  // app.port(8080).multithreaded().run();
+  printf("Starting Web Server");
+  app.port(8080).multithreaded().run();
 
   // Open our jingle
   printf("Loading Jingle Audio File %s\n", arguments.file);
