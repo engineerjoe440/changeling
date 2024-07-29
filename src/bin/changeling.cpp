@@ -336,7 +336,7 @@ int main(int argc, char *argv[]) {
   mosquitto_message_callback_set(mqtt_client, on_mqtt_message);
 
   printf("Starting Web Server");
-  auto _a = app.port(8080).multithreaded().run_async();
+  std::future _a = app.port(8080).multithreaded().run_async();
 
   // Open our jingle
   printf("Loading Jingle Audio File %s\n", arguments.file);
