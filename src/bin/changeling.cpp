@@ -17,6 +17,7 @@
 #include <mosquitto.h>
 #include <argp.h>
 #include <stdbool.h>
+#include "crow_all.h"
 #include "changeling.hpp"
 
 using namespace std;
