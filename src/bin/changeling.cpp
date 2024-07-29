@@ -297,12 +297,12 @@ void on_mqtt_message(struct mosquitto *mosq, void *obj, const mosquitto_message 
 The main program loop.
 */
 int main(int argc, char *argv[]) {
-  crow::App app;
+  // crow::App app;
 
-  CROW_ROUTE(app,"/hello")
-  ([](){
-      return crow::response("hello");
-  });
+  // CROW_ROUTE(app,"/hello")
+  // ([](){
+  //     return crow::response("hello");
+  // });
 
   struct arguments arguments;
 
