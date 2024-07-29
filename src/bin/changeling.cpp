@@ -297,7 +297,7 @@ void on_mqtt_message(struct mosquitto *mosq, void *obj, const mosquitto_message 
 The main program loop.
 */
 int main(int argc, char *argv[]) {
-  crow::SimpleApp app;
+  crow::App app;
 
   CROW_ROUTE(app,"/hello")
   ([](){
@@ -336,7 +336,7 @@ int main(int argc, char *argv[]) {
   mosquitto_message_callback_set(mqtt_client, on_mqtt_message);
 
   printf("Starting Web Server");
-  app.port(8080).multithreaded().run();
+  app.port(8080).multithreaded().run_async();
 
   // Open our jingle
   printf("Loading Jingle Audio File %s\n", arguments.file);
