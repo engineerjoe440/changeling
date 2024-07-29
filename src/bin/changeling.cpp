@@ -332,7 +332,7 @@ int main(int argc, char *argv[]) {
 
   CROW_ROUTE(app,"/hello")
   ([](){
-      return;
+      return crow::response("hello");
   });
 
   printf("Starting Web Server");
