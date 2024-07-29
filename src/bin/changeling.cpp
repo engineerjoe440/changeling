@@ -334,7 +334,7 @@ int main(int argc, char *argv[]) {
       return "Hello world";
   });
 
-  pringf("Starting Web Server");
+  printf("Starting Web Server");
   app.port(8080).multithreaded().run();
 
   // Open our jingle
