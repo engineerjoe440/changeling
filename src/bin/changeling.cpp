@@ -76,7 +76,7 @@ struct arguments {
   char *ipAddress;
 };
 
-inline char* changelingState_To_String(ChangelingRunState state) {
+inline char const* changelingState_To_String(ChangelingRunState state) {
   switch (state)
     {
         case CHANGELING_STATE_DUMPING:   return "DUMP";
@@ -295,8 +295,10 @@ void on_mqtt_message(struct mosquitto *mosq, void *obj, const mosquitto_message 
   }
 }
 
-void serverThreadRunner(void)
-{
+/**
+The main program loop.
+*/
+int main(int argc, char *argv[]) {
   crow::App app;
 
   CROW_ROUTE(app,"/hello")
@@ -306,14 +308,6 @@ void serverThreadRunner(void)
 
   printf("Starting Web Server");
   app.port(8080).multithreaded().run_async();
-}
-
-/**
-The main program loop.
-*/
-int main(int argc, char *argv[]) {
-
-  thread serverThread(serverThreadRunner);
 
   struct arguments arguments;
 
