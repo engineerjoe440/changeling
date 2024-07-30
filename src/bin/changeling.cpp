@@ -301,10 +301,10 @@ The main program loop.
 int main(int argc, char *argv[]) {
   crow::App app;
 
-  // CROW_ROUTE(app,"/hello")
-  // ([](){
-  //     return crow::response("hello");
-  // });
+  CROW_ROUTE(app,"/hello")
+  ([](){
+      return crow::response("hello");
+  });
 
   // printf("Starting Web Server");
   // app.port(8080).multithreaded().run_async();
