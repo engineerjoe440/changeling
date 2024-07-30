@@ -60,7 +60,7 @@ jack_nframes_t max_delay_samples;
 /// Current size of the buffer in samples
 jack_nframes_t cur_delay_samples;
 
-char *localhost = "localhost";
+const char *localhost = "localhost";
 
 const char *argp_program_version = "changeling 1.0";
 const char *argp_program_bug_address = "<engineerjoe440@yahoo.com>";
@@ -299,15 +299,15 @@ void on_mqtt_message(struct mosquitto *mosq, void *obj, const mosquitto_message 
 The main program loop.
 */
 int main(int argc, char *argv[]) {
-  crow::App app;
+  // crow::App app;
 
-  CROW_ROUTE(app,"/hello")
-  ([](){
-      return crow::response("hello");
-  });
+  // CROW_ROUTE(app,"/hello")
+  // ([](){
+  //     return crow::response("hello");
+  // });
 
-  printf("Starting Web Server");
-  app.port(8080).multithreaded().run_async();
+  // printf("Starting Web Server");
+  // app.port(8080).multithreaded().run_async();
 
   struct arguments arguments;
 
