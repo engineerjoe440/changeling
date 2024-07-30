@@ -305,7 +305,7 @@ void serverThreadRunner(void)
   });
 
   printf("Starting Web Server");
-  app.port(8080).multithreaded().run();
+  app.port(8080).multithreaded().run_async();
 }
 
 /**
