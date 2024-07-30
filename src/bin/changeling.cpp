@@ -105,7 +105,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     
     case ARGP_KEY_ARG:
       if (ends_with(arg, ".wav")) {
-        if (arguments->file != 0) {
+        if (arguments->file != NULL) {
           if (ends_with(arguments->file, ".wav")) {
             fprintf(stderr, "File already provided: %s\n", arguments->file);
             /* Too many arguments. */
