@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <sstream>
 #include <string.h>
+#include <thread>
 #include <sys/time.h> 
 #include <time.h> 
 #include <unistd.h>
@@ -293,16 +294,26 @@ void on_mqtt_message(struct mosquitto *mosq, void *obj, const mosquitto_message 
     }
   }
 }
+
+void serverThreadRunner(void)
+{
+  crow::App app;
+
+  CROW_ROUTE(app,"/hello")
+  ([](){
+      return crow::response("hello");
+  });
+
+  printf("Starting Web Server");
+  auto _a = app.port(8080).multithreaded().run_async();
+}
+
 /**
 The main program loop.
 */
 int main(int argc, char *argv[]) {
-  // crow::App app;
 
-  // CROW_ROUTE(app,"/hello")
-  // ([](){
-  //     return crow::response("hello");
-  // });
+  thread serverThread(serverThreadRunner);
 
   struct arguments arguments;
 
@@ -334,9 +345,6 @@ int main(int argc, char *argv[]) {
   }
   mosquitto_subscribe(mqtt_client, NULL, "changeling/commands", 1);
   mosquitto_message_callback_set(mqtt_client, on_mqtt_message);
-
-  // printf("Starting Web Server");
-  // app.port(8080).multithreaded().run_async();
 
   // Open our jingle
   printf("Loading Jingle Audio File %s\n", arguments.file);
