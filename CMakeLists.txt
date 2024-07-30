@@ -21,6 +21,7 @@ include_directories (includes)
 include_directories (${SNDFILE_INCLUDE_DIR})
 include_directories (${JACK_INCLUDE_DIRS})
 include_directories (${MOSQUITTO_INCLUDE_DIR})
+add_compile_options (-std=c++0x -pthread)
 
 # Packaging
 
