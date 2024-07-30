@@ -70,6 +70,7 @@ static struct argp_option options[] = {
     { "ipAddress", 'i', "IP_ADDR", 0, "IP Address of MQTT Broker."},
     { 0 } 
 };
+bool assignedFile = false;
 
 struct arguments {
   char *file;                /* SOME_FILE.wav */
@@ -89,7 +90,7 @@ inline char const* changelingState_To_String(ChangelingRunState state) {
     }
 }
 
-inline bool ends_with(std::string const & value, std::string const & ending)
+bool ends_with(std::string const & value, std::string const & ending)
 {
     if (ending.size() > value.size()) return false;
     return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
@@ -105,15 +106,14 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     
     case ARGP_KEY_ARG:
       if (ends_with(arg, ".wav")) {
-        if (arguments->file != NULL) {
-          if (ends_with(arguments->file, ".wav")) {
-            fprintf(stderr, "File already provided: %s\n", arguments->file);
-            /* Too many arguments. */
-            argp_usage (state);
-          }
+        if (assignedFile) {
+          fprintf(stderr, "File already provided: %s\n", arguments->file);
+          /* Too many arguments. */
+          argp_usage (state);
         }
 
         arguments->file = arg;
+        assignedFile = true;
       }
 
       break;
@@ -320,7 +320,7 @@ int main(int argc, char *argv[]) {
   // Start changeling application
   printf("Changeling Profanity Delay - Starting up\n");
 
-  if (arguments.file == 0) {
+  if (arguments.file == NULL) {
     fprintf(stderr, "Expecting wav file as argument\n");
     return 1;
   }
