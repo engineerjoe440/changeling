@@ -1,4 +1,5 @@
-# Changeling - a profanity delay
+# Changeling
+*a profanity delay*
 
 Changeling is a simple profanity delay intended for live broadcasting of events where control over language used by performers is not guaranteed or possible. It's lightweight, written in C++, uses the JACK audio connection kit for audio I/O, and is network-controllable.
 
@@ -42,9 +43,16 @@ These are done by sending one of the respective strings to the ```changeling/com
 * DUMP
 * EXIT
 
-Feedback from the delay and updates are broadcast on the ```changeling/status``` topic with a message format of:
+Feedback from the delay and updates are broadcast on the ```changeling/status``` topic with a JSON message such as:
 
-    HH:MM:SS - STATE=(IN|OUT|ENTERING|LEAVING|DUMPING);BUFFER_SECONDS=float;
+```json
+{
+    "time": "HH:MM:SS",
+    "state": "IN|OUT|ENTERING|LEAVING|DUMPING",
+    "buffer_seconds": 1.23456,
+    "max_delay": 1.23456,
+}
+```
 
 This is: Timestamp, state, buffer size in seconds (should be 0 when OUT and the length of the jingle file when IN). Parse to your heart's content; more data may be added in a future version in the same form of KEY=VAL;KEY=VAL;, so keep that in mind when writing clients.
 
@@ -77,7 +85,7 @@ To compile and use changeling you need the following:
 
 On Ubuntu, installing these can be done with:
 
-    sudo apt-get install libjack-jackd2-dev libsndfile1-dev libmosquitto0-dev cmake build-essential
+    sudo apt-get install libjack-jackd2-dev libsndfile1-dev libmosquitto-dev cmake build-essential
 
 Compilation is the usual cmake pattern of:
     
