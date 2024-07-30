@@ -309,7 +309,7 @@ int main(int argc, char *argv[]) {
   });
 
   printf("Starting Web Server");
-  app.port(8080).multithreaded().run_async();
+  auto _a = app.port(8080).multithreaded().run_async();
 
   struct arguments arguments;
 
