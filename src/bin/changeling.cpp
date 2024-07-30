@@ -308,8 +308,8 @@ int main(int argc, char *argv[]) {
       return crow::response("hello");
   });
 
-  // printf("Starting Web Server");
-  // app.port(8080).multithreaded().run_async();
+  printf("Starting Web Server");
+  app.port(8080).multithreaded().run_async();
 
   struct arguments arguments;
 
