@@ -21,6 +21,8 @@ include_directories (includes)
 include_directories (${SNDFILE_INCLUDE_DIR})
 include_directories (${JACK_INCLUDE_DIRS})
 include_directories (${MOSQUITTO_INCLUDE_DIR})
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_options (-std=c++0x -pthread)
 
 # Packaging
