@@ -60,6 +60,8 @@ jack_nframes_t max_delay_samples;
 /// Current size of the buffer in samples
 jack_nframes_t cur_delay_samples;
 
+char status_buffer[80];
+
 char localhost[] = "localhost";
 
 const char *argp_program_version = "changeling 1.0";
@@ -305,9 +307,7 @@ int main(int argc, char *argv[]) {
 
   CROW_ROUTE(app,"/api/status")
   ([](){
-    crow::json::wvalue x({{"state", changelingState_To_String(state)}});
-    x["message2"] = "Hello, World.. Again!";
-    return x;
+    return status_buffer;
   });
 
   printf("Starting Web Server");
@@ -443,7 +443,6 @@ int main(int argc, char *argv[]) {
     }
     // Now construct our message
     stringstream msg;
-    char buffer[80];
     time_t rawtime;
     struct tm * timeinfo;
     time ( &rawtime );
@@ -457,14 +456,14 @@ int main(int argc, char *argv[]) {
     msg << "BUFFER_SECONDS=" << (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate << ";";
     // Send it
     sprintf(
-      buffer,
+      status_buffer,
       "{\"time\":\"%s\",\"state\":\"%s\",\"buffer_seconds\":%.5f,\"max_delay\":%.5f}",
       time_buffer,
       changelingState_To_String(state),
       (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate,
       (float)(max_delay_samples/sample_rate)
     );
-    mosquitto_publish(mqtt_client, NULL, "changeling/status", strlen(buffer), &buffer, 1, false);
+    mosquitto_publish(mqtt_client, NULL, "changeling/status", strlen(status_buffer), &status_buffer, 1, false);
     // MQTT loop
     mosquitto_loop(mqtt_client, 100, 1);
     cout << msg.str().c_str() << endl;
