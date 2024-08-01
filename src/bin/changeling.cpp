@@ -426,10 +426,13 @@ int main(int argc, char *argv[]) {
   printf("Starting Web Server");
   auto serverFuture = app.port(8080).multithreaded().run_async();
 
+  // Get thread status using wait_for as before.
+  auto futureStatus = future.wait_for(0ms);
+
   // We're ready to go!
   state = CHANGELING_STATE_ENTERING;
   // And now we want to loop endlessly while we're running.
-  while(state != CHANGELING_STATE_EXITING && serverFuture != std::future_status::ready) {
+  while(state != CHANGELING_STATE_EXITING && futureStatus != std::future_status::ready) {
     if(state != last_state) {
       if (state == CHANGELING_STATE_ENTERING)
         cout << "Entering delay, playing jingle+recording..." << endl;
@@ -467,6 +470,7 @@ int main(int argc, char *argv[]) {
     // MQTT loop
     mosquitto_loop(mqtt_client, 100, 1);
     cout << msg.str().c_str() << endl;
+    futureStatus = future.wait_for(0ms);
     usleep(100000); // MICROseconds. NOT milliseconds.
   }
   mosquitto_destroy(mqtt_client);
