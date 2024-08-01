@@ -2,6 +2,7 @@
 // Changeling profanity delay
 // James Harrison <james@talkunafraid.co.uk>
 // Joe Stanley <engineerjoe440@yahoo.com>
+#include <chrono>
 #include <csignal>
 #include <iostream>
 #include <stdlib.h>
@@ -427,7 +428,7 @@ int main(int argc, char *argv[]) {
   auto serverFuture = app.port(8080).multithreaded().run_async();
 
   // Get thread status using wait_for as before.
-  auto futureStatus = serverFuture.wait_for(0);
+  auto futureStatus = serverFuture.wait_for(0ms);
 
   // We're ready to go!
   state = CHANGELING_STATE_ENTERING;
@@ -470,7 +471,7 @@ int main(int argc, char *argv[]) {
     // MQTT loop
     mosquitto_loop(mqtt_client, 100, 1);
     cout << msg.str().c_str() << endl;
-    futureStatus = serverFuture.wait_for(0);
+    futureStatus = serverFuture.wait_for(0ms);
     usleep(100000); // MICROseconds. NOT milliseconds.
   }
   mosquitto_destroy(mqtt_client);
