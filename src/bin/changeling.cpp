@@ -424,12 +424,12 @@ int main(int argc, char *argv[]) {
   // We now have a full set of connected ports.
 
   printf("Starting Web Server");
-  auto _a = app.port(8080).multithreaded().run_async();
+  auto serverFuture = app.port(8080).multithreaded().run_async();
 
   // We're ready to go!
   state = CHANGELING_STATE_ENTERING;
   // And now we want to loop endlessly while we're running.
-  while(state != CHANGELING_STATE_EXITING) {
+  while(state != CHANGELING_STATE_EXITING && serverFuture != std::future_status::ready) {
     if(state != last_state) {
       if (state == CHANGELING_STATE_ENTERING)
         cout << "Entering delay, playing jingle+recording..." << endl;
