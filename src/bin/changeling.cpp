@@ -306,6 +306,7 @@ The main program loop.
 */
 int main(int argc, char *argv[]) {
   crow::SimpleApp app;
+  app.loglevel(crow::LogLevel::Warning)
 
   CROW_ROUTE(app,"/api/status")
   ([](){
