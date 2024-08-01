@@ -427,7 +427,7 @@ int main(int argc, char *argv[]) {
   auto serverFuture = app.port(8080).multithreaded().run_async();
 
   // Get thread status using wait_for as before.
-  auto futureStatus = future.wait_for(0ms);
+  auto futureStatus = future.wait_for(0);
 
   // We're ready to go!
   state = CHANGELING_STATE_ENTERING;
@@ -470,7 +470,7 @@ int main(int argc, char *argv[]) {
     // MQTT loop
     mosquitto_loop(mqtt_client, 100, 1);
     cout << msg.str().c_str() << endl;
-    futureStatus = future.wait_for(0ms);
+    futureStatus = future.wait_for(0);
     usleep(100000); // MICROseconds. NOT milliseconds.
   }
   mosquitto_destroy(mqtt_client);
