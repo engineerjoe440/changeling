@@ -307,11 +307,9 @@ int main(int argc, char *argv[]) {
 
   CROW_ROUTE(app,"/api/status")
   ([](){
-    return status_buffer;
+    crow::json::wvalue sta(status_buffer);
+    return sta;
   });
-
-  printf("Starting Web Server");
-  auto _a = app.port(8080).multithreaded().run_async();
 
   struct arguments arguments;
 
@@ -331,7 +329,7 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  signal(SIGINT,int_handler); // catch SIGINT
+  signal(SIGINT, int_handler); // catch SIGINT
   // Connect to our MQTT broker
   printf("Connecting to MQTT broker %s\n", arguments.ipAddress);
   mosquitto_lib_init();
@@ -425,6 +423,9 @@ int main(int argc, char *argv[]) {
   
   free (ports);
   // We now have a full set of connected ports.
+
+  printf("Starting Web Server");
+  auto _a = app.port(8080).multithreaded().run_async();
 
   // We're ready to go!
   state = CHANGELING_STATE_ENTERING;
