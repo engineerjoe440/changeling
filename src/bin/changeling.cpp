@@ -303,9 +303,11 @@ The main program loop.
 int main(int argc, char *argv[]) {
   crow::SimpleApp app;
 
-  CROW_ROUTE(app,"/hello")
+  CROW_ROUTE(app,"/api/status")
   ([](){
-      return crow::response("hello");
+    crow::json::wvalue x({{"state", changelingState_To_String(state)}});
+    x["message2"] = "Hello, World.. Again!";
+    return x;
   });
 
   printf("Starting Web Server");
@@ -457,7 +459,8 @@ int main(int argc, char *argv[]) {
     sprintf(
       buffer,
       "{\"time\":\"%s\",\"state\":\"%s\",\"buffer_seconds\":%.5f,\"max_delay\":%.5f}",
-      time_buffer,changelingState_To_String(state),
+      time_buffer,
+      changelingState_To_String(state),
       (jack_ringbuffer_read_space(buffer_l)/sizeof(jack_default_audio_sample_t))/(float)sample_rate,
       (float)(max_delay_samples/sample_rate)
     );
