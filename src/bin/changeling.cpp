@@ -472,7 +472,7 @@ int main(int argc, char *argv[]) {
     cout << msg.str().c_str() << endl;
     auto futureStatus = serverFuture.wait_for(0ms);
     // Handle Interrupts Caught by Web Server
-    if (futureStatus != std::future_status::ready) {
+    if (futureStatus == std::future_status::ready) {
       cout << "Got interrupt, shutting down" << endl;
       // Set our state to exiting, let while loop tear it all down
       state = CHANGELING_STATE_EXITING;
