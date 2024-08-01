@@ -307,8 +307,7 @@ int main(int argc, char *argv[]) {
 
   CROW_ROUTE(app,"/api/status")
   ([](){
-    crow::json::rvalue sta(status_buffer);
-    return sta;
+    return crow::response("application/json", status_buffer);;
   });
 
   struct arguments arguments;
